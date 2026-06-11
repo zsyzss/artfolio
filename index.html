@@ -76,6 +76,24 @@
     .nav-links a:hover { color: var(--terracotta); }
     .nav-links a:hover::before { width: 100%; }
 
+    /* 购物车徽标 */
+    .cart-icon { position: relative; cursor: pointer; font-size: 1.3rem; }
+    .cart-badge {
+      position: absolute; top: -8px; right: -10px;
+      background: var(--terracotta); color: white;
+      font-size: 0.7rem; font-weight: 700;
+      min-width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 50px; padding: 0 5px;
+      transition: transform 0.3s ease;
+    }
+    .cart-badge.bump { animation: bump 0.3s ease; }
+    @keyframes bump {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.4); }
+      100% { transform: scale(1); }
+    }
+
     /* ========== Hero ========== */
     .hero {
       min-height: 100vh; display: flex; flex-direction: column;
@@ -202,7 +220,7 @@
     }
     .work-meta {
       font-size: 0.9rem; color: var(--charcoal); opacity: 0.6;
-      display: flex; gap: 1rem; flex-wrap: wrap;
+      display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;
     }
     .work-tag {
       display: inline-block; padding: 0.2rem 0.8rem; background: rgba(212,133,106,0.1);
@@ -212,6 +230,148 @@
       font-size: 0.95rem; color: var(--charcoal); opacity: 0.7;
       margin-top: 0.5rem; line-height: 1.6;
     }
+    .work-price {
+      font-family: 'Ma Shan Zheng', cursive; font-size: 1.4rem;
+      color: var(--terracotta); margin-top: 0.5rem;
+    }
+    .work-actions {
+      display: flex; gap: 0.75rem; margin-top: 1rem;
+    }
+    .btn-add-cart {
+      flex: 1; padding: 0.6rem 1rem; border: 1.5px solid var(--terracotta);
+      background: transparent; color: var(--terracotta); border-radius: 8px;
+      cursor: pointer; font-size: 0.85rem; font-family: 'Noto Sans SC', sans-serif;
+      transition: all 0.3s ease; display: flex; align-items: center;
+      justify-content: center; gap: 0.4rem;
+    }
+    .btn-add-cart:hover {
+      background: var(--terracotta); color: white;
+    }
+    .btn-add-cart.added {
+      background: var(--deep-green); color: white;
+      border-color: var(--deep-green);
+    }
+    .btn-fav {
+      width: 40px; height: 40px; border: 1.5px solid var(--sand);
+      background: transparent; border-radius: 8px; cursor: pointer;
+      font-size: 1.1rem; transition: all 0.3s ease;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .btn-fav:hover { border-color: #e74c3c; color: #e74c3c; }
+    .btn-fav.favorited { background: #ffe0e0; border-color: #e74c3c; color: #e74c3c; }
+    .work-status {
+      position: absolute; top: 1rem; right: 1rem;
+      padding: 0.3rem 0.8rem; border-radius: 50px;
+      font-size: 0.75rem; font-weight: 700; z-index: 2;
+      background: rgba(74,103,65,0.9); color: white;
+    }
+    .work-status.sold-out { background: rgba(200,50,50,0.9); }
+
+    /* 购物车侧栏 */
+    .cart-sidebar {
+      position: fixed; top: 0; right: -420px; width: 400px; max-width: 90vw;
+      height: 100%; background: var(--warm-white); z-index: 1001;
+      box-shadow: -5px 0 30px rgba(0,0,0,0.15);
+      transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      display: flex; flex-direction: column;
+    }
+    .cart-sidebar.open { right: 0; }
+    .cart-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4); z-index: 1000;
+      opacity: 0; visibility: hidden; transition: all 0.3s ease;
+    }
+    .cart-overlay.open { opacity: 1; visibility: visible; }
+    .cart-header {
+      padding: 1.5rem; border-bottom: 1px solid var(--sand);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .cart-header h3 { font-family: 'Ma Shan Zheng', cursive; font-size: 1.5rem; color: var(--ink); }
+    .cart-close {
+      width: 36px; height: 36px; border: none; background: var(--sand);
+      border-radius: 50%; cursor: pointer; font-size: 1.2rem;
+      color: var(--charcoal); display: flex; align-items: center;
+      justify-content: center; transition: all 0.3s ease;
+    }
+    .cart-close:hover { background: var(--terracotta); color: white; }
+    .cart-items { flex: 1; overflow-y: auto; padding: 1rem; }
+    .cart-item {
+      display: flex; gap: 1rem; padding: 1rem;
+      border-radius: 12px; margin-bottom: 0.75rem;
+      background: var(--cream); align-items: center;
+    }
+    .cart-item-thumb {
+      width: 60px; height: 60px; background: var(--sand);
+      border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; color: var(--charcoal); opacity: 0.5;
+    }
+    .cart-item-info { flex: 1; }
+    .cart-item-info .work-title { font-size: 1rem; margin-bottom: 0.25rem; }
+    .cart-item-price { color: var(--terracotta); font-weight: 700; font-size: 0.95rem; }
+    .cart-item-remove {
+      width: 30px; height: 30px; border: none; background: none;
+      color: #999; cursor: pointer; font-size: 1.2rem;
+      transition: color 0.3s;
+    }
+    .cart-item-remove:hover { color: #e74c3c; }
+    .cart-footer {
+      padding: 1.5rem; border-top: 1px solid var(--sand);
+    }
+    .cart-total {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1rem; font-size: 1.1rem;
+    }
+    .cart-total .amount {
+      font-family: 'Ma Shan Zheng', cursive; font-size: 1.8rem;
+      color: var(--terracotta);
+    }
+    .cart-empty {
+      text-align: center; padding: 3rem 1rem;
+      color: var(--charcoal); opacity: 0.5;
+    }
+    .cart-empty .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+    /* 询价弹窗 */
+    .inquiry-modal {
+      display: none; position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%; z-index: 1002;
+      background: var(--overlay-bg);
+      backdrop-filter: blur(10px);
+      justify-content: center; align-items: center;
+    }
+    .inquiry-modal.active { display: flex; }
+    .inquiry-content {
+      background: var(--warm-white); border-radius: 20px;
+      max-width: 500px; width: 90%; padding: 2.5rem;
+      position: relative; animation: slideUp 0.4s ease;
+    }
+    .inquiry-content h3 {
+      font-family: 'Ma Shan Zheng', cursive; font-size: 1.8rem;
+      color: var(--ink); margin-bottom: 0.5rem;
+    }
+    .inquiry-content .inquiry-work { color: var(--terracotta); font-size: 1.2rem; margin-bottom: 1.5rem; }
+    .inquiry-form { display: flex; flex-direction: column; gap: 1rem; }
+    .inquiry-form input,
+    .inquiry-form textarea {
+      padding: 0.9rem 1.2rem; border: 1.5px solid var(--sand);
+      background: var(--cream); border-radius: 12px;
+      font-family: 'Noto Sans SC', sans-serif; font-size: 0.95rem;
+      outline: none; transition: all 0.3s;
+    }
+    .inquiry-form input:focus,
+    .inquiry-form textarea:focus {
+      border-color: var(--terracotta);
+      box-shadow: 0 0 0 3px rgba(212,133,106,0.15);
+    }
+    .inquiry-form textarea { resize: vertical; min-height: 100px; }
+    .inquiry-submit {
+      padding: 0.9rem 2rem; background: var(--terracotta);
+      color: white; border: none; border-radius: 50px;
+      font-size: 1rem; cursor: pointer; font-family: 'Noto Sans SC', sans-serif;
+      transition: all 0.3s;
+    }
+    .inquiry-submit:hover { transform: translateY(-2px); }
 
     /* ========== 灯箱 Modal ========== */
     .lightbox {
@@ -258,6 +418,29 @@
     .lightbox-info { padding: 2rem; }
     .lightbox-info .work-title { font-size: 1.8rem; margin-bottom: 1rem; }
     .lightbox-info .work-desc { font-size: 1rem; line-height: 1.8; margin-bottom: 1rem; }
+    .lightbox-price {
+      font-family: 'Ma Shan Zheng', cursive; font-size: 2rem;
+      color: var(--terracotta); margin-bottom: 1rem;
+    }
+    .lightbox-actions {
+      display: flex; gap: 1rem; margin-bottom: 1rem;
+    }
+    .lightbox-actions button {
+      padding: 0.7rem 1.5rem; border-radius: 8px; cursor: pointer;
+      font-size: 0.9rem; font-family: 'Noto Sans SC', sans-serif;
+      transition: all 0.3s; display: flex; align-items: center;
+      gap: 0.4rem;
+    }
+    .lb-btn-cart {
+      border: 1.5px solid var(--terracotta); background: transparent;
+      color: var(--terracotta);
+    }
+    .lb-btn-cart:hover { background: var(--terracotta); color: white; }
+    .lb-btn-inquiry {
+      border: 1.5px solid var(--indigo); background: transparent;
+      color: var(--indigo);
+    }
+    .lb-btn-inquiry:hover { background: var(--indigo); color: white; }
     .lightbox-nav {
       position: absolute; top: 50%; transform: translateY(-50%);
       width: 50px; height: 50px; border: none;
@@ -270,6 +453,34 @@
     .lightbox-nav:hover { background: var(--terracotta); color: white; }
     .lightbox-prev { left: -70px; }
     .lightbox-next { right: -70px; }
+
+    /* ========== 服务介绍 ========== */
+    .services-section {
+      padding: 8rem 3rem; background: var(--parchment);
+    }
+    .services-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2.5rem; max-width: 1200px; margin: 3rem auto 0;
+    }
+    .service-card {
+      background: var(--warm-white); border-radius: 16px;
+      padding: 2.5rem 2rem; text-align: center;
+      transition: all 0.3s ease; border: 1px solid transparent;
+    }
+    .service-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--terracotta);
+      box-shadow: 0 10px 30px rgba(212,133,106,0.1);
+    }
+    .service-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .service-title {
+      font-family: 'Noto Serif SC', serif; font-size: 1.2rem;
+      color: var(--ink); margin-bottom: 0.75rem;
+    }
+    .service-desc {
+      font-size: 0.9rem; color: var(--charcoal); opacity: 0.7;
+      line-height: 1.6;
+    }
 
     /* ========== 关于我 ========== */
     .about-section {
@@ -316,6 +527,16 @@
       color: var(--terracotta); margin-bottom: 0.5rem;
     }
     .stat-label { font-size: 0.85rem; color: var(--charcoal); opacity: 0.6; }
+    .resume-download {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      margin-top: 1.5rem; padding: 0.8rem 2rem;
+      border: 1.5px solid var(--terracotta); color: var(--terracotta);
+      text-decoration: none; border-radius: 50px;
+      font-size: 0.95rem; transition: all 0.3s;
+    }
+    .resume-download:hover {
+      background: var(--terracotta); color: white;
+    }
 
     /* ========== 联系表单 ========== */
     .contact-section {
@@ -386,12 +607,24 @@
     .back-to-top.visible { opacity: 1; visibility: visible; }
     .back-to-top:hover { transform: translateY(-3px); }
 
+    /* ========== Toast 通知 ========== */
+    .toast {
+      position: fixed; bottom: 2rem; left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--deep-green); color: white;
+      padding: 1rem 2rem; border-radius: 12px;
+      font-size: 0.95rem; z-index: 2000;
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
     /* ========== 响应式 ========== */
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
       .nav-links { gap: 1.5rem; }
       .nav-links a { font-size: 0.85rem; }
-      .works-section, .about-section, .contact-section { padding: 5rem 1.5rem; }
+      .works-section, .about-section, .contact-section, .services-section { padding: 5rem 1.5rem; }
       .works-grid { grid-template-columns: 1fr; gap: 2rem; }
       .about-content { grid-template-columns: 1fr; gap: 3rem; }
       .about-stats { gap: 2rem; }
@@ -401,6 +634,8 @@
       .lightbox-content { width: 95%; }
       .filter-bar { gap: 0.5rem; }
       .filter-btn { padding: 0.5rem 1.2rem; font-size: 0.8rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .lightbox-actions { flex-direction: column; }
     }
   </style>
 </head>
@@ -411,8 +646,15 @@
     <a href="#" class="logo">墨染</a>
     <ul class="nav-links">
       <li><a href="#works">作品</a></li>
+      <li><a href="#services">服务</a></li>
       <li><a href="#about">关于</a></li>
       <li><a href="#contact">联系</a></li>
+      <li>
+        <div class="cart-icon" id="cart-toggle">
+          🛒
+          <span class="cart-badge" id="cart-count">0</span>
+        </div>
+      </li>
     </ul>
   </nav>
 
@@ -459,12 +701,19 @@
            data-medium="水彩"
            data-size="40×60cm"
            data-year="2026"
+           data-price="¥3,800"
            data-desc="描绘春日午后阳光透过树叶洒在庭院里的温暖场景，用淡彩层层叠加，捕捉光线的微妙变化。">
+        <span class="work-status">可收藏</span>
         <div class="work-image">作品预览 1</div>
         <div class="work-info">
           <span class="work-tag">水彩</span>
           <h3 class="work-title">春日暖阳</h3>
+          <div class="work-price">¥3,800</div>
           <div class="work-meta"><span>40×60cm</span><span>2026</span></div>
+          <div class="work-actions">
+            <button class="btn-add-cart" onclick="addToCart(this)">🛒 加入收藏</button>
+            <button class="btn-fav" onclick="toggleFav(this)">♡</button>
+          </div>
         </div>
       </div>
 
@@ -473,12 +722,19 @@
            data-medium="油画"
            data-size="50×70cm"
            data-year="2026"
+           data-price="¥8,800"
            data-desc="捕捉城市清晨第一缕阳光下的建筑剪影，用厚重的油彩表现光影对比，营造宁静而充满希望的氛围。">
+        <span class="work-status">可收藏</span>
         <div class="work-image">作品预览 2</div>
         <div class="work-info">
           <span class="work-tag">油画</span>
           <h3 class="work-title">城市晨光</h3>
+          <div class="work-price">¥8,800</div>
           <div class="work-meta"><span>50×70cm</span><span>2026</span></div>
+          <div class="work-actions">
+            <button class="btn-add-cart" onclick="addToCart(this)">🛒 加入收藏</button>
+            <button class="btn-fav" onclick="toggleFav(this)">♡</button>
+          </div>
         </div>
       </div>
 
@@ -487,12 +743,19 @@
            data-medium="素描"
            data-size="30×40cm"
            data-year="2026"
+           data-price="¥1,200"
            data-desc="以铅笔和炭笔勾勒静物与花卉的轮廓，通过不同角度的排线表现质感和体积，简约而不失细腻。">
+        <span class="work-status">可收藏</span>
         <div class="work-image">作品预览 3</div>
         <div class="work-info">
           <span class="work-tag">素描</span>
           <h3 class="work-title">静物与花</h3>
+          <div class="work-price">¥1,200</div>
           <div class="work-meta"><span>30×40cm</span><span>2026</span></div>
+          <div class="work-actions">
+            <button class="btn-add-cart" onclick="addToCart(this)">🛒 加入收藏</button>
+            <button class="btn-fav" onclick="toggleFav(this)">♡</button>
+          </div>
         </div>
       </div>
 
@@ -501,12 +764,19 @@
            data-medium="综合材料"
            data-size="60×80cm"
            data-year="2025"
+           data-price="¥6,500"
            data-desc="结合水墨、丙烯和拼贴手法，表现山水之间的层次感和空间感，探索传统与现代的融合。">
+        <span class="work-status">可收藏</span>
         <div class="work-image">作品预览 4</div>
         <div class="work-info">
           <span class="work-tag">综合材料</span>
           <h3 class="work-title">山水之间</h3>
+          <div class="work-price">¥6,500</div>
           <div class="work-meta"><span>60×80cm</span><span>2025</span></div>
+          <div class="work-actions">
+            <button class="btn-add-cart" onclick="addToCart(this)">🛒 加入收藏</button>
+            <button class="btn-fav" onclick="toggleFav(this)">♡</button>
+          </div>
         </div>
       </div>
 
@@ -515,12 +785,18 @@
            data-medium="水彩"
            data-size="35×50cm"
            data-year="2025"
+           data-price="¥2,800"
            data-desc="用湿画法表现秋日落叶的朦胧美感，暖色调与水彩的流动性结合，传达对季节更替的感悟。">
         <div class="work-image">作品预览 5</div>
         <div class="work-info">
           <span class="work-tag">水彩</span>
           <h3 class="work-title">秋叶纷飞</h3>
+          <div class="work-price">¥2,800</div>
           <div class="work-meta"><span>35×50cm</span><span>2025</span></div>
+          <div class="work-actions">
+            <button class="btn-add-cart" onclick="addToCart(this)">🛒 加入收藏</button>
+            <button class="btn-fav" onclick="toggleFav(this)">♡</button>
+          </div>
         </div>
       </div>
 
@@ -529,13 +805,52 @@
            data-medium="油画"
            data-size="45×65cm"
            data-year="2025"
-           data-desc="描绘夜晚城市灯火下的温柔时刻，深蓝与暖黄的对比中传递都市生活中的宁静一角。">
+           data-price="已售出"
+           data-desc="描绘夜晚城市灯火下的温柔时刻，深蓝与暖黄的对比中传递都市生活中的宁静一角。"
+           data-sold="true">
+        <span class="work-status sold-out">已售出</span>
         <div class="work-image">作品预览 6</div>
         <div class="work-info">
           <span class="work-tag">油画</span>
           <h3 class="work-title">夜色温柔</h3>
+          <div class="work-price" style="opacity:0.4">已售出</div>
           <div class="work-meta"><span>45×65cm</span><span>2025</span></div>
+          <div class="work-actions">
+            <button class="btn-add-cart" style="opacity:0.4; cursor:default">🛒 已售出</button>
+            <button class="btn-fav" onclick="toggleFav(this)">♡</button>
+          </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 服务介绍 -->
+  <section id="services" class="services-section">
+    <div class="section-header">
+      <p class="section-tag">Services</p>
+      <h2 class="section-title">艺术服务</h2>
+      <p class="section-desc">提供多种艺术定制与收藏服务</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🖼️</div>
+        <h3 class="service-title">原作收藏</h3>
+        <p class="service-desc">每幅作品均为艺术家亲笔创作，附赠收藏证书和作者签名，确保艺术价值与原创品质。</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎨</div>
+        <h3 class="service-title">定制创作</h3>
+        <p class="service-desc">根据客户需求量身定制专属画作，包括肖像画、风景画、抽象创作等，打造独一无二的艺术。</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📐</div>
+        <h3 class="service-title">版画印刷</h3>
+        <p class="service-desc">提供原作的高品质艺术微喷印刷，选用博物馆级颜料和纸张，还原作品每一个细节。</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🏛️</div>
+        <h3 class="service-title">展览合作</h3>
+        <p class="service-desc">接受画廊、美术馆、艺术空间的展览邀约，提供作品借展、联展及策展服务。</p>
       </div>
     </div>
   </section>
@@ -553,10 +868,53 @@
           <span id="lb-size"></span>
           <span id="lb-year"></span>
         </div>
+        <div class="lightbox-price" id="lb-price"></div>
         <p class="work-desc" id="lb-desc"></p>
+        <div class="lightbox-actions" id="lb-actions">
+          <button class="lb-btn-cart" id="lb-cart-btn">🛒 加入收藏</button>
+          <button class="lb-btn-inquiry" id="lb-inquiry-btn">💬 询价</button>
+        </div>
       </div>
     </div>
     <button class="lightbox-nav lightbox-next" id="lb-next">›</button>
+  </div>
+
+  <!-- 询价弹窗 -->
+  <div class="inquiry-modal" id="inquiry-modal">
+    <div class="inquiry-content">
+      <button class="cart-close" id="inquiry-close">✕</button>
+      <h3>💬 作品询价</h3>
+      <p class="inquiry-work" id="inquiry-work-title"></p>
+      <form class="inquiry-form" id="inquiry-form">
+        <input type="text" placeholder="您的姓名" required>
+        <input type="email" placeholder="您的邮箱" required>
+        <input type="tel" placeholder="联系电话（选填）">
+        <textarea placeholder="您的想法（尺寸偏好、展示空间等）"></textarea>
+        <button type="submit" class="inquiry-submit">提交询价 →</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 购物车侧栏 -->
+  <div class="cart-overlay" id="cart-overlay"></div>
+  <div class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+      <h3>🛒 收藏清单</h3>
+      <button class="cart-close" id="cart-close">✕</button>
+    </div>
+    <div class="cart-items" id="cart-items">
+      <div class="cart-empty" id="cart-empty">
+        <div class="empty-icon">🎨</div>
+        <p>还没有收藏作品哦~</p>
+      </div>
+    </div>
+    <div class="cart-footer" id="cart-footer" style="display:none;">
+      <div class="cart-total">
+        <span>合计</span>
+        <span class="amount" id="cart-total">¥0</span>
+      </div>
+      <button class="form-submit" style="width:100%" onclick="checkout()">查看联系方式</button>
+    </div>
   </div>
 
   <!-- 关于我 -->
@@ -568,6 +926,7 @@
         <h2 class="section-title">艺术家介绍</h2>
         <p class="about-desc">你好！我是一名自由艺术家，专注于水彩与油画的创作。我的作品探索自然与人文的交汇点，试图在色彩与线条间寻找情感共鸣。</p>
         <p class="about-desc">我相信艺术不仅是视觉的享受，更是心灵的对话。每一幅作品都承载着我对生活的感悟和对美的追求。</p>
+        <a href="#" class="resume-download" download>📄 下载艺术家简历</a>
         <div class="about-stats">
           <div class="stat-item"><div class="stat-number">10+</div><div class="stat-label">年创作经验</div></div>
           <div class="stat-item"><div class="stat-number">200+</div><div class="stat-label">完成作品</div></div>
@@ -628,7 +987,142 @@
   <!-- 返回顶部 -->
   <button class="back-to-top" id="back-to-top">↑</button>
 
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
   <script>
+    // ===== 购物车数据 =====
+    let cart = JSON.parse(localStorage.getItem('artfolio-cart') || '[]');
+    let favorites = JSON.parse(localStorage.getItem('artfolio-favs') || '[]');
+
+    function saveCart() { localStorage.setItem('artfolio-cart', JSON.stringify(cart)); }
+    function saveFavs() { localStorage.setItem('artfolio-favs', JSON.stringify(favorites)); }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    // ===== 加入购物车 =====
+    function addToCart(btn) {
+      const card = btn.closest('.work-card');
+      const title = card.dataset.title;
+      const price = card.dataset.price;
+      const medium = card.dataset.medium;
+      const already = cart.find(c => c.title === title);
+      if (already) {
+        showToast('📋 这件作品已经在收藏清单里了');
+        return;
+      }
+      cart.push({ title, price, medium, id: Date.now() });
+      saveCart();
+      updateCartUI();
+      btn.classList.add('added');
+      btn.textContent = '✓ 已收藏';
+      document.getElementById('cart-count').classList.add('bump');
+      setTimeout(() => document.getElementById('cart-count').classList.remove('bump'), 300);
+      showToast('🎨 已添加到收藏清单');
+    }
+
+    function removeFromCart(id) {
+      cart = cart.filter(c => c.id !== id);
+      saveCart();
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const badge = document.getElementById('cart-count');
+      const items = document.getElementById('cart-items');
+      const empty = document.getElementById('cart-empty');
+      const footer = document.getElementById('cart-footer');
+      const totalEl = document.getElementById('cart-total');
+
+      badge.textContent = cart.length;
+
+      // Remove old cart items (not empty div)
+      items.querySelectorAll('.cart-item').forEach(el => el.remove());
+
+      if (cart.length === 0) {
+        empty.style.display = 'block';
+        footer.style.display = 'none';
+        return;
+      }
+
+      empty.style.display = 'none';
+      footer.style.display = 'block';
+
+      let totalPrice = 0;
+      cart.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        const numPrice = parseInt(item.price.replace(/[¥,]/g, '')) || 0;
+        totalPrice += numPrice;
+        div.innerHTML = `
+          <div class="cart-item-thumb">${item.medium}</div>
+          <div class="cart-item-info">
+            <div class="work-title">${item.title}</div>
+            <div class="cart-item-price">${item.price}</div>
+          </div>
+          <button class="cart-item-remove" onclick="removeFromCart(${item.id})">✕</button>
+        `;
+        items.appendChild(div);
+      });
+      totalEl.textContent = '¥' + totalPrice.toLocaleString();
+    }
+
+    // ===== 收藏夹 =====
+    function toggleFav(btn) {
+      const card = btn.closest('.work-card');
+      const title = card.dataset.title;
+      if (favorites.includes(title)) {
+        favorites = favorites.filter(f => f !== title);
+        btn.classList.remove('favorited');
+        btn.textContent = '♡';
+      } else {
+        favorites.push(title);
+        btn.classList.add('favorited');
+        btn.textContent = '♥';
+        showToast('❤️ 已添加到收藏夹');
+      }
+      saveFavs();
+    }
+
+    // ===== 购物车开关 =====
+    document.getElementById('cart-toggle').addEventListener('click', () => {
+      document.getElementById('cart-sidebar').classList.add('open');
+      document.getElementById('cart-overlay').classList.add('open');
+    });
+    document.getElementById('cart-close').addEventListener('click', closeCart);
+    document.getElementById('cart-overlay').addEventListener('click', closeCart);
+    function closeCart() {
+      document.getElementById('cart-sidebar').classList.remove('open');
+      document.getElementById('cart-overlay').classList.remove('open');
+    }
+
+    // ===== 询价 =====
+    document.getElementById('lb-inquiry-btn').addEventListener('click', () => {
+      const title = document.getElementById('lb-title').textContent;
+      document.getElementById('inquiry-work-title').textContent = title;
+      document.getElementById('inquiry-modal').classList.add('active');
+    });
+    document.getElementById('inquiry-close').addEventListener('click', () => {
+      document.getElementById('inquiry-modal').classList.remove('active');
+    });
+    document.getElementById('inquiry-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      document.getElementById('inquiry-modal').classList.remove('active');
+      showToast('✅ 询价已提交，我会尽快回复！');
+    });
+
+    // ===== 收藏清单查看联系方式 =====
+    function checkout() {
+      closeCart();
+      document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+      showToast('📧 请填写联系表单，说明收藏意向~');
+    }
+
     // ===== 分类筛选 =====
     const filterBtns = document.querySelectorAll('.filter-btn');
     const workCards = document.querySelectorAll('.work-card');
@@ -656,6 +1150,8 @@
     const lbSize = document.getElementById('lb-size');
     const lbYear = document.getElementById('lb-year');
     const lbDesc = document.getElementById('lb-desc');
+    const lbPrice = document.getElementById('lb-price');
+    const lbActions = document.getElementById('lb-actions');
     let currentIndex = 0;
 
     function openLightbox(index) {
@@ -666,6 +1162,26 @@
       lbSize.textContent = card.dataset.size;
       lbYear.textContent = card.dataset.year;
       lbDesc.textContent = card.dataset.desc;
+      lbPrice.textContent = card.dataset.price || '价格面议';
+
+      // 已售出隐藏按钮
+      if (card.dataset.sold === 'true') {
+        lbActions.style.display = 'none';
+      } else {
+        lbActions.style.display = 'flex';
+        document.getElementById('lb-cart-btn').onclick = () => {
+          const fakeBtn = document.createElement('button');
+          fakeBtn.dataset.cardIndex = index;
+          addToCart(fakeBtn);
+          // 同步灯箱按钮状态
+          const realBtn = workCards[index].querySelector('.btn-add-cart');
+          if (realBtn) {
+            realBtn.classList.add('added');
+            realBtn.textContent = '✓ 已收藏';
+          }
+        };
+      }
+
       lightbox.classList.add('active');
       document.body.style.overflow = 'hidden';
     }
@@ -738,10 +1254,13 @@
       });
     }, { threshold: 0.1 });
 
-    document.querySelectorAll('.work-card, .stat-item').forEach(el => {
+    document.querySelectorAll('.work-card, .stat-item, .service-card').forEach(el => {
       el.style.opacity = '0';
       observer.observe(el);
     });
+
+    // 初始化购物车
+    updateCartUI();
   </script>
 
 </body>
