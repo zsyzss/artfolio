@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>艺术作品集 | Art Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* 自然手绘风配色 */
+      --cream: #FDF8F0;
+      --warm-white: #FFFBF5;
+      --sand: #E8DDD3;
+      --terracotta: #D4856A;
+      --ochre: #C4953B;
+      --sage: #8FA68A;
+      --deep-green: #4A6741;
+      --indigo: #4A5D7C;
+      --charcoal: #3A3A3A;
+      --ink: #2C2C2C;
+      --parchment: #F5EDE3;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+      background-color: var(--cream);
+      color: var(--charcoal);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* 纸张纹理背景 */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: 
+        repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(139,119,101,0.03) 28px, rgba(139,119,101,0.03) 29px),
+        repeating-linear-gradient(90deg, transparent, transparent 28px, rgba(139,119,101,0.03) 28px, rgba(139,119,101,0.03) 29px);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* ========== 导航栏 ========== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(180deg, var(--cream) 0%, rgba(253,248,240,0.95) 80%, transparent 100%);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .logo {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 2rem;
+      color: var(--terracotta);
+      text-decoration: none;
+      position: relative;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 100%; height: 2px;
+      background: var(--terracotta);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--charcoal);
+      font-size: 0.95rem;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a::before {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 50%;
+      width: 0; height: 1.5px;
+      background: var(--terracotta);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+
+    .nav-links a:hover {
+      color: var(--terracotta);
+    }
+
+    .nav-links a:hover::before {
+      width: 100%;
+    }
+
+    /* ========== Hero 区域 ========== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: 6rem 2rem 4rem;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      opacity: 0.15;
+    }
+
+    .watercolor-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .blob-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, var(--terracotta) 0%, transparent 70%);
+      top: -10%; right: -5%;
+      animation-delay: 0s;
+    }
+
+    .blob-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, var(--sage) 0%, transparent 70%);
+      bottom: 10%; left: -5%;
+      animation-delay: -7s;
+    }
+
+    .blob-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, var(--ochre) 0%, transparent 70%);
+      top: 40%; left: 30%;
+      animation-delay: -14s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -30px) scale(1.05); }
+      66% { transform: translate(-20px, 20px) scale(0.95); }
+    }
+
+    .hero-content {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-title {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: clamp(3rem, 8vw, 6rem);
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+      animation: fadeInUp 1s ease forwards;
+      opacity: 0;
+    }
+
+    .hero-subtitle {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--charcoal);
+      opacity: 0.7;
+      max-width: 600px;
+      margin: 0 auto 3rem;
+      line-height: 1.8;
+      animation: fadeInUp 1s ease 0.3s forwards;
+      opacity: 0;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2.5rem;
+      background: var(--terracotta);
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(212,133,106,0.3);
+      animation: fadeInUp 1s ease 0.6s forwards;
+      opacity: 0;
+    }
+
+    .hero-cta:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(212,133,106,0.4);
+      background: #c47560;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--charcoal);
+      opacity: 0.5;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    .scroll-hint span {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-10px); }
+    }
+
+    /* ========== 作品展示区 ========== */
+    .works-section {
+      padding: 8rem 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+
+    .section-tag {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 0.85rem;
+      color: var(--terracotta);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-desc {
+      font-size: 1.1rem;
+      color: var(--charcoal);
+      opacity: 0.7;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* 作品网格 */
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .work-card {
+      background: var(--warm-white);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .work-card:hover {
+      transform: translateY(-8px) rotate(-1deg);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    }
+
+    .work-image {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--sand);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 1.5rem;
+      color: var(--charcoal);
+      opacity: 0.7;
+      transition: all 0.4s ease;
+    }
+
+    .work-card:hover .work-image {
+      opacity: 0.9;
+    }
+
+    /* 水彩纹理模拟 */
+    .work-image::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: 
+        radial-gradient(ellipse at 20% 50%, rgba(212,133,106,0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 50%, rgba(143,166,138,0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(196,149,59,0.2) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .work-card:hover .work-image::before {
+      opacity: 1;
+    }
+
+    .work-info {
+      padding: 1.5rem;
+    }
+
+    .work-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.3rem;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+
+    .work-meta {
+      font-size: 0.9rem;
+      color: var(--charcoal);
+      opacity: 0.6;
+      display: flex;
+      gap: 1rem;
+    }
+
+    /* ========== 关于我 ========== */
+    .about-section {
+      padding: 8rem 3rem;
+      background: var(--parchment);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-section::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(212,133,106,0.15) 0%, transparent 70%);
+      border-radius: 50%;
+      transform: translate(30%, -30%);
+    }
+
+    .about-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-image {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: var(--sand);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 2rem;
+      color: var(--charcoal);
+      opacity: 0.7;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-image::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: 
+        radial-gradient(ellipse at 30% 30%, rgba(212,133,106,0.4) 0%, transparent 60%),
+        radial-gradient(ellipse at 70% 70%, rgba(143,166,138,0.3) 0%, transparent 60%);
+    }
+
+    .about-text .section-tag {
+      text-align: left;
+    }
+
+    .about-text .section-title {
+      text-align: left;
+      margin-bottom: 2rem;
+    }
+
+    .about-desc {
+      font-size: 1.05rem;
+      line-height: 2;
+      color: var(--charcoal);
+      opacity: 0.85;
+      margin-bottom: 2rem;
+    }
+
+    .about-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 2.5rem;
+      color: var(--terracotta);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--charcoal);
+      opacity: 0.6;
+    }
+
+    /* ========== 联系方式 ========== */
+    .contact-section {
+      padding: 8rem 3rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .contact-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2rem;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      text-decoration: none;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .contact-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      color: var(--terracotta);
+    }
+
+    /* ========== Footer ========== */
+    footer {
+      padding: 3rem;
+      text-align: center;
+      background: var(--parchment);
+      color: var(--charcoal);
+      opacity: 0.6;
+      font-size: 0.9rem;
+    }
+
+    /* ========== 响应式 ========== */
+    @media (max-width: 768px) {
+      nav {
+        padding: 1rem 1.5rem;
+      }
+
+      .nav-links {
+        gap: 1.5rem;
+      }
+
+      .nav-links a {
+        font-size: 0.85rem;
+      }
+
+      .works-section,
+      .about-section,
+      .contact-section {
+        padding: 5rem 1.5rem;
+      }
+
+      .works-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .about-content {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .about-stats {
+        gap: 2rem;
+      }
+    }
+
+    /* ========== 手绘装饰 ========== */
+    .sketch-line {
+      position: absolute;
+      background: var(--terracotta);
+      opacity: 0.15;
+      border-radius: 2px;
+    }
+
+    .sketch-line-1 {
+      width: 200px; height: 2px;
+      top: 20%; left: 5%;
+      transform: rotate(-15deg);
+    }
+
+    .sketch-line-2 {
+      width: 150px; height: 2px;
+      bottom: 30%; right: 10%;
+      transform: rotate(25deg);
+    }
+
+    /* 水彩泼溅效果 */
+    .watercolor-splash {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212,133,106,0.1) 0%, transparent 70%);
+      animation: splash 15s ease-in-out infinite;
+    }
+
+    @keyframes splash {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.2) rotate(180deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 导航 -->
+  <nav>
+    <a href="#" class="logo">墨染</a>
+    <ul class="nav-links">
+      <li><a href="#works">作品</a></li>
+      <li><a href="#about">关于</a></li>
+      <li><a href="#contact">联系</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero 区域 -->
+  <section class="hero">
+    <div class="hero-bg">
+      <div class="watercolor-blob blob-1"></div>
+      <div class="watercolor-blob blob-2"></div>
+      <div class="watercolor-blob blob-3"></div>
+    </div>
+    <div class="hero-content">
+      <h1 class="hero-title">用色彩诉说故事</h1>
+      <p class="hero-subtitle">每一笔都是对世界的观察，每一幅画都是内心的回响。<br>在这里，分享我对美的理解与表达。</p>
+      <a href="#works" class="hero-cta">
+        浏览作品集 →
+      </a>
+    </div>
+    <div class="scroll-hint">
+      <span>向下滚动</span>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M10 4L10 16M10 16L5 11M10 16L15 11" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 作品展示 -->
+  <section id="works" class="works-section">
+    <div class="section-header">
+      <p class="section-tag">Portfolio</p>
+      <h2 class="section-title">精选作品</h2>
+      <p class="section-desc">以下是我近期的创作，涵盖水彩、油画、素描等多种形式</p>
+    </div>
+    <div class="works-grid">
+      <div class="work-card">
+        <div class="work-image">作品预览 1</div>
+        <div class="work-info">
+          <h3 class="work-title">春日暖阳</h3>
+          <div class="work-meta">
+            <span>水彩</span>
+            <span>40×60cm</span>
+          </div>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="work-image">作品预览 2</div>
+        <div class="work-info">
+          <h3 class="work-title">城市晨光</h3>
+          <div class="work-meta">
+            <span>油画</span>
+            <span>50×70cm</span>
+          </div>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="work-image">作品预览 3</div>
+        <div class="work-info">
+          <h3 class="work-title">静物与花</h3>
+          <div class="work-meta">
+            <span>素描</span>
+            <span>30×40cm</span>
+          </div>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="work-image">作品预览 4</div>
+        <div class="work-info">
+          <h3 class="work-title">山水之间</h3>
+          <div class="work-meta">
+            <span>综合材料</span>
+            <span>60×80cm</span>
+          </div>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="work-image">作品预览 5</div>
+        <div class="work-info">
+          <h3 class="work-title">秋叶纷飞</h3>
+          <div class="work-meta">
+            <span>水彩</span>
+            <span>35×50cm</span>
+          </div>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="work-image">作品预览 6</div>
+        <div class="work-info">
+          <h3 class="work-title">夜色温柔</h3>
+          <div class="work-meta">
+            <span>油画</span>
+            <span>45×65cm</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 关于我 -->
+  <section id="about" class="about-section">
+    <div class="about-content">
+      <div class="about-image">个人照片</div>
+      <div class="about-text">
+        <p class="section-tag">About Me</p>
+        <h2 class="section-title">艺术家介绍</h2>
+        <p class="about-desc">
+          你好！我是一名自由艺术家，专注于水彩与油画的创作。我的作品探索自然与人文的交汇点，试图在色彩与线条间寻找情感共鸣。
+          <br><br>
+          我相信艺术不仅是视觉的享受，更是心灵的对话。每一幅作品都承载着我对生活的感悟和对美的追求。
+        </p>
+        <div class="about-stats">
+          <div class="stat-item">
+            <div class="stat-number">10+</div>
+            <div class="stat-label">年创作经验</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">200+</div>
+            <div class="stat-label">完成作品</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">展览经历</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系方式 -->
+  <section id="contact" class="contact-section">
+    <div class="contact-content">
+      <p class="section-tag">Contact</p>
+      <h2 class="section-title">联系我</h2>
+      <p class="section-desc">无论是作品收藏、合作邀约还是交流探讨，都欢迎联系我</p>
+      <div class="contact-links">
+        <a href="mailto:hello@example.com" class="contact-link">
+          📧 邮箱
+        </a>
+        <a href="#" class="contact-link">
+          📱 微信
+        </a>
+        <a href="#" class="contact-link">
+          📷 小红书
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2026 墨染艺术工作室 | 用色彩连接世界</p>
+  </footer>
+
+</body>
+</html>
